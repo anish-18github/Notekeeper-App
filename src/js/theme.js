@@ -1,5 +1,8 @@
+'use strict';
+
 /**
- * @copyright codewithsadee 2023
+ * Initialize the theme 
  */
 
-'use strict';
+const /** {string | indefined} */ storedTheme = localStorage.getItem ('theme');
+console.log("~ file: theme.js:8 ~ storedTheme:", storedTheme);
