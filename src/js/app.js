@@ -4,7 +4,7 @@
  * Module import
  */
 
-import { addEventOnElements } from "./utils.js";
+import { addEventOnElements, getGreetingMsg } from "./utils.js";
 
 /**
  * Toggle sidebar in small screen
@@ -18,3 +18,18 @@ addEventOnElements($sidebarTogglers, 'click', function (){
     $sidebar.classList.toggle('active');
     $overlay.classList.toggle('active');
 });
+
+/**
+ * Show greeting message on homepage
+ */
+
+const /** {HTMLElement} */ $greetingElem = document.querySelector('[data-greeting]');
+const /** number */ currentHour = new Date().getHours();
+$greetingElem.textContent = getGreetingMsg(currentHour);
+
+/**
+ * Show current date on homepage
+ */
+
+const /** {HTMLElement} */ $currentDateElem = document.querySelector('[data-current-date]');
+$currentDateElem.textContent = new Date().toDateString().replace(' ', ', ')
