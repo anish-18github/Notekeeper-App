@@ -4,8 +4,15 @@
  * Module import
  */
 
-import { addEventOnElements, getGreetingMsg } from "./utils.js";
+import {
+    addEventOnElements,
+    getGreetingMsg,
+    activeNotebook,
+    makeElemEditable
+} from "./utils.js";
+
 import { Tooltip } from "./components/Tooltip.js";
+import { db } from "./db.js";
 
 /**
  * Toggle sidebar in small screen
@@ -41,4 +48,55 @@ $greetingElem.textContent = getGreetingMsg(currentHour);
  */
 
 const /** {HTMLElement} */ $currentDateElem = document.querySelector('[data-current-date]');
-$currentDateElem.textContent = new Date().toDateString().replace(' ', ', ')
+$currentDateElem.textContent = new Date().toDateString().replace(' ', ', ');
+
+/** 
+ * Notebook create field 
+ */
+
+const/** {HTMLElemet} */ $sidebarList = document.querySelector('[data-sidebar-list]');
+const/** {HTMLElemet} */ $addNotebookBtn = document.querySelector('[data-add-notebook]');
+
+
+const showNotebookField = function () {
+    const /** {HTMLElement} */ $navItem = document.createElement('div');
+    $navItem.classList.add('nav-item');
+
+    $navItem.innerHTML = `
+    <span class="text text-label-large" data-notebook-field></span>
+
+    <div class="state-layer"></div>
+    `;
+
+    $sidebarList.appendChild($navItem);
+
+    const /** {HTMLElement} */ $navItemField = $navItem.querySelector('[data-notebook-field]');
+
+    //Active new crated notebook and deactive the last one.
+    activeNotebook.call($navItem);
+
+    //Make notebook field content editable and focus
+    makeElemEditable($navItemField);
+
+    //When user press 'Enter' then create boebook.
+    $navItemField.addEventListener('keydown', createNotebook)
+}
+
+$addNotebookBtn.addEventListener('click', showNotebookField);
+
+/**
+ * Create new notebook.
+ * Creates a new notebook when the 'Enter' key is pressed while editing a notebok name field.
+ * The new notebook is stored in the database.
+ * 
+ * @param {KeyboardEvent} event - The keyboard event that triggered notebook creation.
+ */
+
+const createNotebook = function (event) {
+    if (event.key === 'Enter') {
+
+        //Strore new created notebook in database.
+        db.post.notebook(this.textContent || 'Untitled') // this: navItemField
+
+    }
+}

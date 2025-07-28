@@ -2,6 +2,7 @@
 
 /**
  * Attaches a tooltip behavior to a given DOM element.
+ * 
  * When the element is hovered over, a tooltip with the specified content is displayed.
  * The tooltip is automatically positioned below the element.
  * 

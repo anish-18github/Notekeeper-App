@@ -30,7 +30,43 @@ const getGreetingMsg = function (currentHour) {
     return `Good ${greeting}`;
 }
 
+let /** {HTMLElement | undefined} */ $lastActiveNavItem;
+
+/**
+ * Activates a navigation item by adding the 'active' class and deactivates the previously active item.
+ */
+const activeNotebook = function () {
+    $lastActiveNavItem?.classList.remove('active');
+    this.classList.add('active'); // this: $navItem
+    $lastActiveNavItem = this;  // this: $navItem
+}
+
+/**
+ * Make a DOM element editable by aetting the 'contenteditable' attribute to true and focusing on it.
+ * 
+ * @param {HTMLElement} $element - The DOM element to make editable.
+ */
+
+const makeElemEditable = function ($element) {
+    $element.setAttribute('contenteditable', true);
+    $element.focus();
+
+}
+
+/**
+ * Generate a unique ID based on the current timestamp.
+ * 
+ @returns {string} A string representation of the current timestamp.
+ */
+const generateID = function () {
+    return new Date().getTime().toString();
+}
+
 
 export {
-    addEventOnElements, getGreetingMsg
+    addEventOnElements,
+    getGreetingMsg,
+    activeNotebook,
+    makeElemEditable,
+    generateID
 }

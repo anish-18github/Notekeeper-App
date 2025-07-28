@@ -275,7 +275,8 @@ textarea {
 }
 
 input,
-textarea [contenteditable="true"] {
+textarea,
+[contenteditable="true"] {
   outline: none;
 }
 
