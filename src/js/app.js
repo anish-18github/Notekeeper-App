@@ -13,6 +13,7 @@ import {
 
 import { Tooltip } from "./components/Tooltip.js";
 import { db } from "./db.js";
+import { client } from "./client.js";
 
 /**
  * Toggle sidebar in small screen
@@ -95,8 +96,15 @@ $addNotebookBtn.addEventListener('click', showNotebookField);
 const createNotebook = function (event) {
     if (event.key === 'Enter') {
 
-        //Strore new created notebook in database.
-        db.post.notebook(this.textContent || 'Untitled') // this: navItemField
+        // Strore new created notebook in database.
+        const /** {Object} */notebookData = db.post.notebook(this.textContent || 'Untitled'); // this: navItemField
+        this.parentElement.remove();
 
+        // Render navItem
+        client.notebook.create(notebookData);
     }
 }
+
+/**
+ * Render the existing notebook list by retriving data from the database and passing it to the client.
+ */

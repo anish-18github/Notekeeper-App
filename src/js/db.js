@@ -39,7 +39,7 @@ const readDB = function () {
  * Writes the current state of the global variable 'notekeeperDB' to local storage.
  */
 const writeDB = function () {
-    localStorage.setItem('notekeeperDB', JSON.stringify('notekeeperDB'));
+    localStorage.setItem('notekeeperDB', JSON.stringify(notekeeperDB));
 }
 
 
@@ -49,7 +49,7 @@ const writeDB = function () {
  * 
  * @namespace
  * @property {Object} get = Functions for retriving data from the database.
- * @property {Object} gepost - Functions for adding data to the database.
+ * @property {Object} post - Functions for adding data to the database.
  * @property {Object} update - Functions for updating data in the database.
  * @property {Object} delete - Functions for deleting data from the database.
  */
@@ -61,7 +61,7 @@ export const db = {
     post: {
 
         /**
-         * Add a new notebook to the datavase.
+         * Add a new notebook to the database.
          * 
          * @function
          * @param {string} name  - The name of the new notebook.
@@ -76,10 +76,12 @@ export const db = {
                 name,
                 notes: []
             }
-            console.log(notebookData);
-            
+
+            notekeeperDB.notebooks.push(notebookData);
 
             writeDB();
+
+            return notebookData;
         }
     }
 }
