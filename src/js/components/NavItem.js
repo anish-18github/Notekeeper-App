@@ -2,8 +2,16 @@
 
 /**
  * Import module
- */
+*/
 import { Tooltip } from "./Tooltip.js";
+import { activeNotebook, makeElemEditable } from "../utils.js";
+import { db } from "../db.js";
+import { client } from "../client.js";
+import { DeleteConfirmModal } from "./Modal.js";
+
+
+
+const /** {HTMLElement} */ $notePanelTitle = document.querySelector('[data-note-panel-title]');
 
 /**
  * Craetes a navigation item representing a notebook. this item displays the notebook's name, allow editing and 
@@ -39,7 +47,60 @@ export const NavItem = function (id, name) {
     // Show tooltip on edit and delete button 
     const /** {Array<HTMLElement>} */ $tooltipElems = $navItem.querySelectorAll('[data-tooltip]');
     $tooltipElems.forEach($elem => Tooltip($elem));
-    
+
+    /** 
+     * Habdles the click event on the navigation item. Update the note panel's title,
+     * retrieves the associated notes, and marks the item as active.
+     */
+    $navItem.addEventListener('click', function () {
+        $notePanelTitle.textContent = name;
+        activeNotebook.call(this); // this: $navItem
+    })
+
+
+    /**
+     * Notebook edit functionality
+     */
+    const /** {HTMLElement} */ $navItemEditBtn = $navItem.querySelector('[data-edit-btn]');
+    const /** {HTMLElement} */ $navItemField = $navItem.querySelector('[data-notebook-field]');
+    $navItemEditBtn.addEventListener('click', makeElemEditable.bind(null, $navItemField));
+
+    $navItemField.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            this.removeAttribute('contenteditable');
+
+            //Update edited data in database.
+            const updateNotebookData = db.update.notebook(id, this.textContent);
+
+            // Render updated notebook 
+            client.notebook.update(id, updateNotebookData);
+
+        }
+    });
+
+
+    /**
+     * Notebook delete functionality
+     */
+    const /** {HTMLElement} */ $navItemDeleteBtn = $navItem.querySelector('[ data-delete-btn]');
+    $navItemDeleteBtn.addEventListener('click', function () {
+
+        const /** {Object} */ modal = DeleteConfirmModal(name);
+
+        modal.open();
+
+        modal.onSubmit(function (isConfirm) {
+            if (isConfirm) {
+                db.delete.notebook(id);
+                client.notebook.delete(id);
+            }
+
+            modal.close();
+
+        });
+
+    });
+
     return $navItem;
 
 }

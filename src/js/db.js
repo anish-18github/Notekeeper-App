@@ -3,7 +3,7 @@
 /**
  * Import module
  */
-import { generateID } from "./utils.js";
+import { generateID, findNotebook, findNotebookIndex } from "./utils.js";
 
 
 
@@ -82,6 +82,57 @@ export const db = {
             writeDB();
 
             return notebookData;
+        }
+    },
+
+    get: {
+
+
+        notebook() {
+            readDB();
+
+            return notekeeperDB.notebooks;
+        }
+    },
+
+    update: {
+
+        /**
+         * Updates the name a notebook in the database.
+         * 
+         * @function
+         * @param {string} notebookId - The ID of the notebook to update.
+         * @param {string} name - The new name for the notebook.
+         * @returns {Object} The updated notebook object.
+         */
+        notebook(notebookId, name) {
+            readDB();
+
+            const /** {Object} */ notebook = findNotebook(notekeeperDB, notebookId);
+            notebook.name = name;
+
+            writeDB();
+
+            return notebook;
+
+        }
+    },
+
+    delete: {
+
+        /**
+         * Delete the notebook from the database.
+         * 
+         * @function
+         * @param {string} notebookId - The ID of the notebook to delete.
+         */
+        notebook(notebookId) {
+            readDB();
+
+            const /** {number} */ notebookIndex = findNotebookIndex(notekeeperDB, notebookId);
+            notekeeperDB.notebooks.splice(notebookIndex, 1);
+
+            writeDB();
         }
     }
 }

@@ -87,7 +87,7 @@ $addNotebookBtn.addEventListener('click', showNotebookField);
 
 /**
  * Create new notebook.
- * Creates a new notebook when the 'Enter' key is pressed while editing a notebok name field.
+ * Creates a new notebook when the 'Enter' key is pressed while editing a notebook name field.
  * The new notebook is stored in the database.
  * 
  * @param {KeyboardEvent} event - The keyboard event that triggered notebook creation.
@@ -108,3 +108,11 @@ const createNotebook = function (event) {
 /**
  * Render the existing notebook list by retriving data from the database and passing it to the client.
  */
+
+const renderExistedNotebook = function () {
+    const /** {Array} */ notebookList = db.get.notebook();
+    client.notebook.read(notebookList);
+    
+}
+
+renderExistedNotebook();

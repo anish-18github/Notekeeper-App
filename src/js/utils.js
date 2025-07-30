@@ -63,10 +63,37 @@ const generateID = function () {
 }
 
 
+/**
+ * Finds a notebook in database by its ID.
+ * 
+ * @param {Object} db - The database containing the notebook.
+ * @param {string} notebookId - The ID of the notebook to find.
+ * @returns {Object | undefined} The found notebook objectm or undefined if not found.
+ */
+const findNotebook = function (db, notebookId) {
+    return db.notebooks.find(notebook => notebook.id === notebookId);
+}
+
+
+
+/**
+ * Finds the index of a notebook in an arrat of notebook based on it's ID.
+ * 
+ * @param {Object} db -The object conaining an array of notebooks.
+ * @param {string} notebookId - The ID of the notebook to find.
+ * @returns {number} The index of the found notebook, or -1 if not found.
+ */
+const findNotebookIndex = function (db, notebookId) {
+    return db.notebooks.findIndex(item => item.id === notebookId);
+}
+
+
 export {
     addEventOnElements,
     getGreetingMsg,
     activeNotebook,
     makeElemEditable,
-    generateID
+    generateID,
+    findNotebook,
+    findNotebookIndex
 }

@@ -9,6 +9,7 @@ import { activeNotebook } from "./utils.js";
 
 const /** {HTMLElement} */ $sidebarList = document.querySelector('[data-sidebar-list]');
 const /** {HTMLElement} */ $notePanelTitle = document.querySelector('[data-note-panel-title]');
+const /** {HTMLElement} */ $notePanel = document.querySelector('[ data-note-panel]');
 
 
 /**
@@ -26,13 +27,66 @@ export const client = {
         /**
          * Creates a new notebook in the UI, based on provided notebook data.
          * 
-         * @param {Object} notebokData - Data representing the new notebook.
+         * @param {Object} notebookData - Data representing the new notebook.
          */
-        create(notebokData) {
-            const /** {HTMLElement} */ $navItem = NavItem(notebokData.id, notebokData.name);
+        create(notebookData) {
+            const /** {HTMLElement} */ $navItem = NavItem(notebookData.id, notebookData.name);
             $sidebarList.appendChild($navItem);
             activeNotebook.call($navItem);
-            $notePanelTitle.textContent = notebokData.name;
+            $notePanelTitle.textContent = notebookData.name;
+        },
+
+        /**
+         * Read and display a list of notebooks in the UI.
+         * 
+         * @param {Array<Object>} notebookList - List of notebook data to display.
+         */
+        read(notebookList) {
+            notebookList.forEach((notebookData, index) => {
+                const /** {HTMLElement} */ $navItem = NavItem(notebookData.id, notebookData.name);
+
+                if (index === 0) {
+                    activeNotebook.call($navItem);
+                    $notePanelTitle.textContent = notebookData.name;
+                }
+
+                $sidebarList.appendChild($navItem);
+            });
+        },
+
+        /**
+         * Updates the UI to reflect changes in a notebook.
+         * 
+         * @param {string} notebookId - ID of the notebook for update.
+         * @param {Object} notebookData - New data for the notebook.
+         */
+        update(notebookId, notebookData) {
+            const /** {HTMLElement} */ $oldNotebook = document.querySelector(`[data-notebook="${notebookId}"]`);
+            const /** {HTMLElement} */ $newNotebook = NavItem(notebookData.id, notebookData.name);
+
+            $notePanelTitle.textContent = notebookData.name;
+            $sidebarList.replaceChild($newNotebook, $oldNotebook);
+            activeNotebook.call($newNotebook);
+        },
+
+
+        /**
+         * Delete a notebook from the UI.
+         * 
+         * @param {string} notebookId - ID of the notebook to delete.
+         */
+        delete(notebookId) {
+            const /** {HTMLElement} */ $deletedNotebook = document.querySelector(`[data-notebook="${notebookId}"]`);
+            const /** HTMLElement | null */ $activeNavIten = $deletedNotebook.nextElementSibling ?? $deletedNotebook.previousElementSibling;
+
+            if ($activeNavIten) {
+                $activeNavIten.click();
+            } else {
+                $notePanelTitle.innerHTML = '';
+                // $notePanel.innerHTML = '';
+            }
+
+            $deletedNotebook.remove();
         }
     }
 
