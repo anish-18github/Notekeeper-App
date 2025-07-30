@@ -14,6 +14,8 @@ import {
 import { Tooltip } from "./components/Tooltip.js";
 import { db } from "./db.js";
 import { client } from "./client.js";
+import { NoteModal } from "./components/Modal.js";
+
 
 /**
  * Toggle sidebar in small screen
@@ -112,7 +114,31 @@ const createNotebook = function (event) {
 const renderExistedNotebook = function () {
     const /** {Array} */ notebookList = db.get.notebook();
     client.notebook.read(notebookList);
-    
+
 }
 
 renderExistedNotebook();
+
+/**
+ * Create new note 
+ * 
+ * Attaches event listner to a collection of DOM elements representing "create Note" buttons.
+ * When a button is clicked, it ipens a modal fro creating a new note and handles a 
+ * submission of the new note to the database and client.
+ */
+const /** {Array<HTMLElement>} */ $noteCreateBtns = document.querySelectorAll('[data-note-create-btn]');
+
+addEventOnElements($noteCreateBtns, 'click', function () {
+    // Create and open a new modal.
+    const /** {Object} */ modal = NoteModal();
+    modal.open();
+
+    // Handle the submission of the new note to the database and client.
+    modal.onSubmit(noteObj => {
+        const /** {string} */ activeNotebookId = document.querySelector('[data-notebook].active').dataset.notebook;
+
+        const /** {Object} */ noteData = db.post.note(activeNotebookId, noteObj);
+        modal.close();
+
+    })
+});
