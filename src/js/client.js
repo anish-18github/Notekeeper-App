@@ -6,10 +6,31 @@
  */
 import { NavItem } from "./components/NavItem.js";
 import { activeNotebook } from "./utils.js";
+import { Card } from "./components/Card.js";
 
 const /** {HTMLElement} */ $sidebarList = document.querySelector('[data-sidebar-list]');
 const /** {HTMLElement} */ $notePanelTitle = document.querySelector('[data-note-panel-title]');
 const /** {HTMLElement} */ $notePanel = document.querySelector('[ data-note-panel]');
+const /** {Array<HTMLElement>} */ $noteCreateBtns = document.querySelectorAll('[data-note-create-btn]');
+const /** {string} */ emptyNotesTemplate = `
+    <div class="empty-notes">
+        <span class="material-symbols-rounded" aria-hidden="true">note_stack</span>
+
+        <div class="text-headline-small">No notes</div>
+    </div>
+`;
+
+
+/**
+ * Enables or disables "Create Note" buttond based on wheter there are any notebooks.
+ * 
+ * @param {boolean} isThereAnyNotebooks - Indicates whether there are any notebooks.
+ */
+const disableNoteCreateBtns = function (isThereAnyNotebooks) {
+    $noteCreateBtns.forEach($item => {
+        $item[isThereAnyNotebooks ? 'removeAttribute' : 'setAttribute'] ('disabled', '');
+    })
+}
 
 
 /**
@@ -34,6 +55,8 @@ export const client = {
             $sidebarList.appendChild($navItem);
             activeNotebook.call($navItem);
             $notePanelTitle.textContent = notebookData.name;
+            $notePanel.innerHTML = emptyNotesTemplate;
+            disableNoteCreateBtns(true);
         },
 
         /**
@@ -42,6 +65,8 @@ export const client = {
          * @param {Array<Object>} notebookList - List of notebook data to display.
          */
         read(notebookList) {
+            disableNoteCreateBtns(notebookList.length);
+
             notebookList.forEach((notebookData, index) => {
                 const /** {HTMLElement} */ $navItem = NavItem(notebookData.id, notebookData.name);
 
@@ -87,6 +112,45 @@ export const client = {
             }
 
             $deletedNotebook.remove();
+        }
+    },
+
+    note: {
+
+
+        /**
+         * Create a new card in the UI based on provided note data.
+         * 
+         * @param {Object} noteData - Data representing the new note.
+         */
+        create(noteData) {
+            //Append card in notepanel
+            const /** {HTMLElement} */ $card = Card(noteData);
+            $notePanel.appendChild($card);
+
+        },
+
+
+
+        /**
+         * Reads and display a list of notes in the UI.
+         * 
+         * @param {Array<Object} noteList - List of note data to display.
+         */
+        read(noteList) {
+
+            if (noteList.length) {
+                $notePanel.innerHTML = '';
+
+                noteList.forEach(noteData => {
+                    const /** {HTMLElement} */ $card = Card(noteData);
+                    $notePanel.appendChild($card);
+                });
+
+            } else {
+                $notePanel.innerHTML = emptyNotesTemplate;
+            }
+
         }
     }
 

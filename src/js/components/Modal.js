@@ -28,9 +28,9 @@ const NoteModal = function (title = 'Untitled', text = 'Add your note ...', time
 
         </button>
 
-        <input type="text" placeholder="Untitled" value="${title}" class="modal-title text-title-medium" data-note-field>
+        <input type="text" placeholder="Untitled" value="" class="modal-title text-title-medium" data-note-field>
 
-        <textarea placeholder="Take a note..." class="modal-text text-body-large custom-scrollbar" data-note-field>${text}</textarea>
+        <textarea placeholder="Take a note..." class="modal-text text-body-large custom-scrollbar" data-note-field></textarea>
 
         <div class="modal-footer">
 

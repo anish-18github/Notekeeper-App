@@ -138,7 +138,27 @@ addEventOnElements($noteCreateBtns, 'click', function () {
         const /** {string} */ activeNotebookId = document.querySelector('[data-notebook].active').dataset.notebook;
 
         const /** {Object} */ noteData = db.post.note(activeNotebookId, noteObj);
+        client.note.create(noteData);
         modal.close();
 
     })
 });
+
+
+
+/**
+ * Renders existing notes in the active notebook. Retrives note data from the database based on the active notebook's ID 
+ * and uses the client to display the notes.
+ */
+const renderExistedNote = function () {
+    const /** {string | undefined} */ activeNotebookId = document.querySelector('[data-notebook].active')?.dataset.notebook;
+
+    if (activeNotebookId) {
+        const /** {Array<Object>} */ noteList = db.get.note(activeNotebookId);
+        
+        // Display existing note
+        client.note.read(noteList);
+    }
+}
+
+renderExistedNote();
