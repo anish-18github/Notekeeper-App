@@ -60,7 +60,6 @@ export const NavItem = function (id, name) {
         client.note.read(noteList);
     })
 
-
     /**
      * Notebook edit functionality
      */

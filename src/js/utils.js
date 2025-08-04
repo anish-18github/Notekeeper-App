@@ -108,6 +108,36 @@ const getRelativeTime = function (milliseconds) {
 }
 
 
+/**
+ * 
+ * @param {Object} db - The database containing notebooks and notes.
+ * @param {string} noteId - The ID of the note to find.
+ * @returns {Object | undefined} The found note obeject, or undifined if not found.
+ */
+const findNote = (db, noteId) => {
+    let note;
+    for (const notebook of db.notebooks) {
+        note = notebook.notes.find(note => note.id === noteId);
+        if (note) break;
+    }
+
+    return note;
+}
+
+
+
+/**
+ * Finds the index of a note in a notebook's array of notes based on it's ID.
+ * 
+ * @param {Object} notebook - The notebook Object containing the array of notes.
+ * @param {string} noteId - The ID of the note to find.
+ * @returns {number} The index of the found note, o -1 id not found.
+ */
+const findNoteIndex = function (notebook, noteId) {
+    return notebook.notes.findIndex(note => note.id === noteId);
+}
+
+
 export {
     addEventOnElements,
     getGreetingMsg,
@@ -116,5 +146,7 @@ export {
     generateID,
     findNotebook,
     findNotebookIndex,
-    getRelativeTime
+    getRelativeTime,
+    findNote,
+    findNoteIndex
 }

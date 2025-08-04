@@ -14,7 +14,7 @@ $overlay.classList.add('overlay', 'modal-overlay');
  * @param {string} [time='' ] - The time associated with the note.
  * @returns {Object} - An object containg function to open the modal, close the modal and handle note submissions.
  */
-const NoteModal = function (title = 'Untitled', text = 'Add your note ...', time = '') {
+const NoteModal = function (title = '', text = '', time = '') {
 
     const /** {HTMLElement} */ $modal = document.createElement('div');
     $modal.classList.add('modal');
@@ -28,9 +28,9 @@ const NoteModal = function (title = 'Untitled', text = 'Add your note ...', time
 
         </button>
 
-        <input type="text" placeholder="Untitled" value="" class="modal-title text-title-medium" data-note-field>
+        <input type="text" placeholder="Untitled" value="${title}" class="modal-title text-title-medium" data-note-field>
 
-        <textarea placeholder="Take a note..." class="modal-text text-body-large custom-scrollbar" data-note-field></textarea>
+        <textarea placeholder="Take a note..." class="modal-text text-body-large custom-scrollbar" data-note-field>${text}</textarea>
 
         <div class="modal-footer">
 
@@ -100,7 +100,7 @@ const NoteModal = function (title = 'Untitled', text = 'Add your note ...', time
         });
     }
 
-    return { open, close,onSubmit }
+    return { open, close, onSubmit }
 
 }
 

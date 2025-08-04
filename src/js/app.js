@@ -155,7 +155,7 @@ const renderExistedNote = function () {
 
     if (activeNotebookId) {
         const /** {Array<Object>} */ noteList = db.get.note(activeNotebookId);
-        
+
         // Display existing note
         client.note.read(noteList);
     }

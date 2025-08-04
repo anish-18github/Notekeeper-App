@@ -3,7 +3,7 @@
 /**
  * Import module
  */
-import { generateID, findNotebook, findNotebookIndex } from "./utils.js";
+import { generateID, findNotebook, findNotebookIndex, findNote, findNoteIndex } from "./utils.js";
 
 
 
@@ -162,6 +162,25 @@ export const db = {
 
             return notebook;
 
+        },
+
+
+        /**
+         * 
+         * @param {string} noteId - The ID of the note to update.
+         * @param {Object} object  - The updated data for the note.
+         * @returns {Object} The updated noe obeject.
+         */
+        note(noteId, object) {
+            readDB();
+
+            const /** {Object} */ oldNote = findNote(notekeeperDB, noteId);
+            const /** {Object} */ newNote = Object.assign(oldNote, object);
+
+            writeDB();
+
+            return newNote;
+
         }
     },
 
@@ -180,6 +199,29 @@ export const db = {
             notekeeperDB.notebooks.splice(notebookIndex, 1);
 
             writeDB();
+        },
+
+
+
+        /**
+         * Deletes a note from a specified notebook in the database.
+         * 
+         * @function
+         * @param {string} notebookId - The ID of the notebook containing the note to delete. 
+         * @param {string} noteId - The ID of the note to delete.
+         * @returns {Array{Object}} An array of remaining notes in the notebook.
+         */
+        note(notebookId, noteId) {
+            readDB();
+
+            const /** {Object} */ notebook = findNotebook(notekeeperDB, notebookId);
+            const /** {number} */ noteIndex = findNoteIndex(notebook, noteId);
+
+            notebook.notes.splice(noteIndex, 1);
+
+            writeDB();
+
+            return notebook.notes;
         }
     }
 }
